@@ -1,0 +1,592 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="BloqueAntifa - Tableau de bord de filtrage et de modération des contenus en ligne.">
+<title>BloqueAntifa | Protection numérique</title>
+
+<style>
+:root {
+    --background: #090d0b;
+    --panel: #121a15;
+    --panel2: #19251d;
+    --green: #36c879;
+    --green-dark: #153d29;
+    --white: #ffffff;
+    --muted: #a5b3a9;
+    --border: #293b30;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--background);
+    color: var(--white);
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+}
+
+header {
+    background: #0d1510;
+    border-bottom: 1px solid var(--border);
+    padding: 18px 35px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon {
+    width: 45px;
+    height: 45px;
+    background: var(--green-dark);
+    border: 1px solid var(--green);
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    color: var(--green);
+    font-size: 25px;
+}
+
+.logo h1 {
+    font-size: 22px;
+}
+
+.logo small {
+    color: var(--green);
+    letter-spacing: 2px;
+    font-size: 10px;
+}
+
+.status {
+    color: var(--green);
+    font-size: 13px;
+}
+
+.container {
+    max-width: 1400px;
+    margin: auto;
+    padding: 35px;
+}
+
+.welcome {
+    margin-bottom: 30px;
+}
+
+.welcome h2 {
+    font-size: 30px;
+    margin-bottom: 8px;
+}
+
+.welcome p {
+    color: var(--muted);
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.stat {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px;
+}
+
+.stat p {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.stat h3 {
+    font-size: 29px;
+    color: var(--green);
+    margin-top: 10px;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 20px;
+}
+
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 20px;
+}
+
+.panel h2 {
+    font-size: 18px;
+    margin-bottom: 18px;
+}
+
+.post {
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    padding: 16px;
+    border-radius: 9px;
+    margin-bottom: 12px;
+}
+
+.post strong {
+    color: var(--green);
+}
+
+.post p {
+    margin: 12px 0;
+    line-height: 1.5;
+}
+
+.post small {
+    color: var(--muted);
+}
+
+button {
+    background: var(--green-dark);
+    color: white;
+    border: 1px solid var(--green);
+    border-radius: 7px;
+    padding: 9px 13px;
+    cursor: pointer;
+    margin: 5px 5px 0 0;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: var(--green);
+    color: #07110b;
+}
+
+button.secondary {
+    background: transparent;
+    border-color: var(--border);
+}
+
+button:focus-visible,
+input:focus-visible {
+    outline: 2px solid var(--green);
+    outline-offset: 3px;
+}
+
+.criterion {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.criterion:last-child {
+    border-bottom: none;
+}
+
+.criterion p {
+    font-size: 14px;
+}
+
+.criterion small {
+    display: block;
+    color: var(--muted);
+    margin-top: 4px;
+}
+
+input[type="checkbox"] {
+    accent-color: var(--green);
+    width: 19px;
+    height: 19px;
+    flex-shrink: 0;
+}
+
+.notice {
+    background: #182b20;
+    border: 1px solid var(--green-dark);
+    padding: 15px;
+    border-radius: 9px;
+    color: #c4e8d0;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-top: 15px;
+}
+
+.network {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--border);
+    gap: 12px;
+}
+
+.network:last-child {
+    border-bottom: none;
+}
+
+.network span {
+    color: var(--green);
+    font-size: 12px;
+}
+
+footer {
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--muted);
+    padding: 25px;
+    font-size: 12px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+@media(max-width: 900px) {
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media(max-width: 550px) {
+    header {
+        padding: 15px;
+    }
+
+    .container {
+        padding: 20px 14px;
+    }
+
+    .stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .welcome h2 {
+        font-size: 24px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        <div class="logo-icon">⬡</div>
+        <div>
+            <h1>BloqueAntifa</h1>
+            <small>SAFE FEED CONTROL</small>
+        </div>
+    </div>
+
+    <div class="status">
+        ● Interface de démonstration
+    </div>
+</header>
+
+<main class="container">
+
+    <section class="welcome">
+        <h2>Tableau de bord</h2>
+        <p>Centre de contrôle de modération des contenus numériques.</p>
+    </section>
+
+    <section class="stats">
+        <div class="stat">
+            <p>Publications analysées</p>
+            <h3 id="analyzed">128</h3>
+        </div>
+
+        <div class="stat">
+            <p>Publications masquées</p>
+            <h3 id="hiddenCount">12</h3>
+        </div>
+
+        <div class="stat">
+            <p>À vérifier</p>
+            <h3 id="reviewCount">3</h3>
+        </div>
+
+        <div class="stat">
+            <p>Faux positifs corrigés</p>
+            <h3 id="restoredCount">0</h3>
+        </div>
+    </section>
+
+    <div class="layout">
+
+        <section>
+
+            <div class="panel">
+                <h2>Publications détectées</h2>
+
+                <div id="feed">
+
+                    <article class="post">
+                        <strong>Exemple de publication 01</strong>
+                        <p>
+                            Exemple fictif de menace explicite
+                            dirigée contre une personne.
+                        </p>
+                        <small>Catégorie : Menace explicite</small>
+                        <br>
+                        <button onclick="hidePost(this)">
+                            Masquer
+                        </button>
+                        <button class="secondary" onclick="restorePost(this)">
+                            Faux positif
+                        </button>
+                    </article>
+
+                    <article class="post">
+                        <strong>Exemple de publication 02</strong>
+                        <p>
+                            Exemple fictif de harcèlement ciblé
+                            envers une personne.
+                        </p>
+                        <small>Catégorie : Harcèlement</small>
+                        <br>
+                        <button onclick="hidePost(this)">
+                            Masquer
+                        </button>
+                        <button class="secondary" onclick="restorePost(this)">
+                            Faux positif
+                        </button>
+                    </article>
+
+                    <article class="post">
+                        <strong>Exemple de publication 03</strong>
+                        <p>
+                            Exemple fictif de citation d'un propos
+                            haineux dans un contexte de dénonciation.
+                        </p>
+                        <small>Catégorie : Contexte à vérifier</small>
+                        <br>
+                        <button onclick="restorePost(this)">
+                            Conserver
+                        </button>
+                        <button class="secondary" onclick="hidePost(this)">
+                            Masquer
+                        </button>
+                    </article>
+
+                </div>
+
+                <p id="empty" class="hidden">
+                    Aucune publication visible.
+                </p>
+
+                <div class="notice">
+                    Les publications présentées sont fictives.
+                    Cette démonstration ne se connecte à aucun réseau social.
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>Journal des corrections</h2>
+                <div id="log">
+                    <small>Aucune correction enregistrée.</small>
+                </div>
+            </div>
+
+        </section>
+
+        <section>
+
+            <div class="panel">
+                <h2>Critères de modération</h2>
+
+                <label class="criterion">
+                    <div>
+                        <p>Menaces explicites</p>
+                        <small>Menaces dirigées contre une personne.</small>
+                    </div>
+                    <input type="checkbox" checked>
+                </label>
+
+                <label class="criterion">
+                    <div>
+                        <p>Harcèlement ciblé</p>
+                        <small>Intimidation et attaques répétées.</small>
+                    </div>
+                    <input type="checkbox" checked>
+                </label>
+
+                <label class="criterion">
+                    <div>
+                        <p>Incitation à la violence</p>
+                        <small>Appels directs à commettre des violences.</small>
+                    </div>
+                    <input type="checkbox" checked>
+                </label>
+
+                <label class="criterion">
+                    <div>
+                        <p>Propos discriminatoires</p>
+                        <small>Attaques fondées sur des caractéristiques protégées.</small>
+                    </div>
+                    <input type="checkbox" checked>
+                </label>
+
+                <div class="notice">
+                    Les opinions et affiliations politiques ne sont
+                    pas des critères de masquage. Les citations,
+                    critiques et contenus journalistiques doivent
+                    être examinés dans leur contexte.
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>Réseaux sociaux</h2>
+
+                <div class="network">
+                    <b>Facebook</b>
+                    <span>À connecter</span>
+                </div>
+
+                <div class="network">
+                    <b>Instagram</b>
+                    <span>À connecter</span>
+                </div>
+
+                <div class="network">
+                    <b>TikTok</b>
+                    <span>À connecter</span>
+                </div>
+
+                <div class="network">
+                    <b>X</b>
+                    <span>À connecter</span>
+                </div>
+
+                <div class="network">
+                    <b>YouTube</b>
+                    <span>À connecter</span>
+                </div>
+
+                <div class="network">
+                    <b>Reddit</b>
+                    <span>À connecter</span>
+                </div>
+
+                <div class="notice">
+                    Chaque connexion nécessitera une intégration
+                    autorisée et le respect des règles de la plateforme.
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>À propos du projet</h2>
+                <p style="color:var(--muted);line-height:1.7">
+                    BloqueAntifa est un projet de filtrage et de
+                    modération des contenus accessibles en ligne.
+                    Son utilisation est gratuite, sans publicité
+                    et sans abonnement.
+                </p>
+            </div>
+
+        </section>
+
+    </div>
+</main>
+
+<footer>
+    BloqueAntifa © 2026 — Gratuit à vie.
+    <br><br>
+    Prototype de démonstration — Aucun réseau social connecté.
+</footer>
+
+<script>
+let hiddenCount = 12;
+let restoredCount = 0;
+
+function hidePost(button) {
+    const post = button.closest(".post");
+
+    if (!post || post.classList.contains("hidden")) return;
+
+    post.classList.add("hidden");
+    hiddenCount++;
+
+    document.getElementById("hiddenCount").textContent =
+        hiddenCount;
+
+    updateEmpty();
+    addLog("Publication masquée manuellement.");
+}
+
+function restorePost(button) {
+    const post = button.closest(".post");
+
+    if (!post) return;
+
+    if (post.classList.contains("hidden")) {
+        post.classList.remove("hidden");
+    }
+
+    post.style.opacity = "0.65";
+
+    post.querySelectorAll("button").forEach(btn => {
+        btn.disabled = true;
+    });
+
+    restoredCount++;
+
+    document.getElementById("restoredCount").textContent =
+        restoredCount;
+
+    addLog("Publication conservée ou signalée comme faux positif.");
+    updateEmpty();
+}
+
+function addLog(message) {
+    const log = document.getElementById("log");
+
+    if (log.querySelector("small")) {
+        log.innerHTML = "";
+    }
+
+    const entry = document.createElement("p");
+    entry.textContent = "• " + message;
+    entry.style.marginBottom = "8px";
+    entry.style.fontSize = "13px";
+
+    log.prepend(entry);
+}
+
+function updateEmpty() {
+    const posts = document.querySelectorAll(".post");
+
+    const visible = [...posts].some(post =>
+        !post.classList.contains("hidden")
+    );
+
+    document.getElementById("empty").classList.toggle(
+        "hidden",
+        visible
+    );
+}
+</script>
+
+</body>
+</html>
